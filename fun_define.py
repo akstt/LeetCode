@@ -1,8 +1,6 @@
-def print_class_method(class_input):
-    for i in class_input.__dir__():
-        if not i.startswith('_'):
-            print(i)
-
-
-if __name__ == "__main__":
-    print_class_method(set())
+a = {1, 2, 3, 4, 5}
+b = {1}
+c = a - b
+print(c)
+# a.remove(2)
+print(a)

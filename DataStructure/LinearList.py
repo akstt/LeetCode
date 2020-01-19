@@ -1,48 +1,43 @@
 """
-@Author: AKSTT
-@Name: List/线性表
-@定义: 由同类型数据元素构成有序序列的线性结构
+名称: 线性表
+定义: 由同类型数据元素构成有序序列的线性结构
        1.表中元素个数称为线性表的长度
        2.线性表没有元素时，称为空表
        3.表起始位置称为表头，表结束位置称为表尾
-@数据对象集：线性表时n(>=0)个元素构成的有序序列
-@操作集：1.初始化一个空线性表L
+数据对象集：线性表时n(>=0)个元素构成的有序序列
+操作集：1.初始化一个空线性表L
         2.根据位序i返回相应元素
         3.在线性表中查找某个元素x第一次出现位置
         4.在位序i前插入一个新元素X
         5.删除指定位序i的元素
         6.返回线性表L的长度
-
 """
 
 """
-首先是线性表的顺序存储
+顺序表是在计算机内存中以数组的形式保存的线性表，是指用一组地址连续的存储单元依次存储数据元素的线性结构。
+线性表采用顺序存储的方式存储就称之为顺序表。顺序表是将表中的结点依次存放在计算机内存中一组地址连续的存储单元中。
+特点： 1.在顺序表中，各个表项的逻辑顺序与其存储的物理顺序一致，即第 i 个表项存储于第 i 个物理位置（1 < i < n）
+       2.对顺序表中的所有表项，即可以进行顺序的访问，也可以随机的访问，也就是说，
+既可以从表的第一个表项开始逐个访问表项，也可以按照表项的序号（下标）直接的访问。
+       3.无需为表示结点间的逻辑关系而增加额外的存储空间，存储利用率提高。
+       4.可以方便的存储表中的任一结点，存储速度快。
 """
 
 
-# 可以用python中的list代替。有些细节部分不太一样：线性表的顺序存储要求同类型数据元素，同时要求输入最大长度maxsize
-class List(list):
-
-    # 添加一个返回线性表长的的方法
-    def len(self):
-        return len(self)
-
-    pass
+from DataStructure.ErrorClass import StorageSmallError
 
 
-# 自定义一个LinearList类，自定义List的方法和属性，有助于了解线性表顺序存储是如何进行存储，插入和删除等操作
-class LinearList:
+# 下面的线性表类不要求同类型数据元素
+# SequenceList线性表的顺序存储
+class SequenceList:
 
-    # 用tuple(list)的格式代表LinearList
-    def __init__(self, maxsize=0, iterator_input=()):
+    def __init__(self, maxsize=0, input_list=()):
+        if len(input_list) > maxsize:
+            raise StorageSmallError
         self._maxsize = maxsize
-        self._linear_list = tuple([None] for _ in range(maxsize))
-        self._last = len(iterator_input)
-        for i, x in enumerate(iterator_input):
-            try:
-                self._linear_list[i][0] = x
-            except IndexError:
-                break
+        self._last = len(input_list)
+        self._sequence_list = list(input_list)
+        self._sequence_list.extend([None] * (maxsize - len(input_list)))
 
     @property
     def maxsize(self):
@@ -54,17 +49,17 @@ class LinearList:
 
     # 根据位序i返回相应元素
     def __getitem__(self, key):
-        return self._linear_list[key][0]
+        return self._sequence_list[key]
 
-    # 对应索引位置元素修改
+    # 修改位序i元素
     def __setitem__(self, key, value):
-        self._linear_list[key][0] = value
+        self._sequence_list[key] = value
         return None
 
-    # 查找 时间复杂度O(n)
+    # 在线性表中查找某个元素x第一次出现位置 时间复杂度O(n)
     def find(self, x):
         for i in range(self._last):
-            if x == self._linear_list[i][0]:
+            if x == self._sequence_list[i]:
                 return i
         return None
 
@@ -81,12 +76,12 @@ class LinearList:
         # 插入元素
         else:
             for i in range(self._last, insert_index, -1):
-                self._linear_list[i][0] = self._linear_list[i-1][0]
-            self._linear_list[insert_index][0] = insert_value
+                self._sequence_list[i] = self._sequence_list[i-1]
+            self._sequence_list[insert_index] = insert_value
             self._last += 1
         return None
 
-    # 删除 默认删除最后一个 时间复杂度O(n)
+    # 删除指定位序i的元素 默认删除最后一个 时间复杂度O(n)
     def delete(self, delete_index=None):
         if delete_index is None:
             delete_index = self._last-1
@@ -96,8 +91,8 @@ class LinearList:
         # 删除元素
         else:
             for i in range(delete_index, self._last-1):
-                self._linear_list[i][0] = self._linear_list[i+1][0]
-            self._linear_list[self._last-1][0] = None
+                self._sequence_list[i] = self._sequence_list[i+1]
+            self._sequence_list[self._last-1] = None
             self._last -= 1
 
     # 返回线性表L的长度
@@ -105,13 +100,13 @@ class LinearList:
         return self._last
 
     def __repr__(self):
-        return str(self._linear_list)
+        return str(self._sequence_list[:self._last])
 
 
 # 测试LinearList
-def LinearList_test():
+def SequenceList_test():
     # 生成线性表a
-    a = LinearList(5, [0, 1, 2])
+    a = SequenceList(7, [0, 1, 2])
     print(a[1])
     a[1] = 2
     print(a)
@@ -134,12 +129,18 @@ def LinearList_test():
 
 
 """
-接下来是线性表的链式存储,通过链建立元素之间的逻辑关系,不需要事先确定maxsize
+链表是一种物理存储单元上非连续、非顺序的存储结构，数据元素的逻辑顺序是通过链表中的指针链接次序实现的。
+链表由一系列结点（链表中每一个元素称为结点）组成，结点可以在运行时动态生成。
+每个结点包括两个部分：一个是存储数据元素的数据域，另一个是存储下一个结点地址的指针域。 
+相比于线性表顺序结构，操作复杂。
+特点： 1.可以方便的进行扩充。
+       2.可以方便的删除和插入
 """
 
 
-# 链式存储的结点类
+# ListNode节点类
 class ListNode:
+
     def __init__(self, node_value=None, node_next=None):
         self._value = node_value
         self._next = node_next
@@ -160,9 +161,14 @@ class ListNode:
     def next(self, change_next):
         self._next = change_next
 
+    def __repr__(self):
+        return str(self._value)
 
-# 带头结点的链表类，
+
+# LinkList线性表的链式存储
+# 带头结点，头节点索引为0
 class LinkList:
+
     def __init__(self, iterator_input=(), head_node=None):
         # 设定头结点
         self._head = ListNode(head_node)
@@ -211,7 +217,7 @@ class LinkList:
             print("索引位置出错")
 
     # 删除指定位序i的元素, 默认删除第一个，查找时间复杂度O(n),删除O(1)
-    def delete(self, delete_index):
+    def delete(self, delete_index=1):
         node_temp = self[delete_index-1]
         if node_temp and node_temp.next:
             node_temp.next = node_temp.next.next
@@ -234,13 +240,33 @@ class LinkList:
             result.append(node_temp.val)
             node_temp = node_temp.next
         return str(result)
+
+
+def LinkList_test():
+    # 生成线性表a
+    a = LinkList([0, 1, 2])
+    print(a[1])
+    print(a)
+    print(a.find(0))
+    print(a.len())
+    a.insert(3)
+    print(a)
+    print(a.find(3))
+    a.insert(4, 5)
+    a.insert(4, 0)
+    print(a.len())
+    print(a)
+    a.delete(0)
+    print(a)
+    a.delete()
+    print(a)
+    a.delete(5)
+    a.delete(3)
+    print(a)
     pass
 
 
 if __name__ == "__main__":
-    # LinearList_test()
-    linklist = LinkList([1, 2, 3, 4, 5])
-    linklist.delete(6)
-    print(linklist)
-    pass
-
+    SequenceList_test()
+    print('------------')
+    LinkList_test()

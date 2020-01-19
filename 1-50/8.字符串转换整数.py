@@ -1,21 +1,65 @@
-"""
-@Author: AKSTT
-@Problem:
-请你来实现一个 atoi 函数，使其能将字符串转换成整数。
-首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。
-当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，作为该整数的正负号；假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。
-该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。
-注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。
-在任何情况下，若函数不能进行有效的转换时，请返回 0。
-说明：
-假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−2^31,  2^31 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
-示例 1:
-输入: "42"
-输出: 42
-"""
+class Solution:
+
+    # 字符串逐步查找，时间复杂度O(n)
+    # 保存结果，空间复杂度O(n)
+    def myAtoi_1(self, s: str) -> int:
+        # index_start, index_end目标子字符串的起始位置和结束位置
+        # flag 寻找起始位置
+        index_start, index_end, flag_1, flag_2 = 0, len(s), False, False
+        # 找到字符串中数字起始位置
+        for index_1, val in enumerate(s):
+            # 结束位置
+            if flag_1 and val.isdigit():
+                flag_2 = True
+                index_end = index_1
+            # 起始位置
+            elif not flag_1:
+                if val == "-" or val == "+":
+                    flag_1 = True
+                    index_start = index_1
+                elif val.isdigit():
+                    flag_1, flag_2 = True, True
+                    index_start, index_end = index_1, index_1
+                elif val != " ":
+                    break
+            else:
+                break
+        if flag_1 and flag_2:
+            result = int(s[index_start: index_end + 1])
+        else:
+            result = 0
+        if result < -2147483648:
+            result = -2147483648
+        elif result > 2147483647:
+            result = 2147483647
+        return result
+
+    # 使用python的内置方法
+    def myAtoi_2(self, s: str) -> int:
+        # 去除左边空格
+        s_new = s.lstrip()
+        index_end = 0
+        for index_1, val in enumerate(s_new[1:], 1):
+            if not val.isdigit():
+                break
+            index_end = index_1
+        try:
+            result = int(s_new[:index_end + 1])
+            return max(-2147483648, min(result, 2147483647))
+        except ValueError:
+            return 0
+
+    # 正则表达式
+    def myAtoi_3(self, s: str) -> int:
+        import re
+        s_new = s.lstrip()
+        result = re.search(r'^[\+-]?\d+', s_new)
+        if result:
+            return max(min(int(result.group(0)), 2 ** 31 - 1), -2 ** 31)
+        else:
+            return 0
 
 
-# 时间复杂度O(n),空间复杂度O(n)
-# 字符串逐步查找，确定是否位数字或-
-def myAtoi(str: str) -> int:
-    pass
+if __name__ == "__main__":
+    s = "4193 with words"
+    print(Solution().myAtoi_3(s))

@@ -200,7 +200,7 @@ class LinkListBinaryTree:
 
     def level_order_traversal(self, tree=None):
         """
-        层次遍历：从左到右，从上到下；循环实现
+        层次遍历：从左到右，从上到下；递归实现
         :param tree: 遍历结果的列表，list
         :return: 遍历结果的列表，list
         """
@@ -222,6 +222,40 @@ class LinkListBinaryTree:
                 nodes_list.append(node.right)
         if nodes_list:
             LinkListBinaryTree._level_order_traversal(tree, nodes_list)
+
+    def isomorphism(self, other_tree):
+        """
+        判断树是否同构,递归解决
+        :param other_tree: 另一棵树
+        :return: 是否同构
+        """
+        if self.data != other_tree.data:
+            return False
+        if_none = sum([1 if self.left is None else 0, 2 if self.right is None else 0,
+                       4 if other_tree.left is None else 0, 8 if other_tree.right is None else 0])
+
+        if if_none == 0:
+            return (self.left.isomorphism(other_tree.left) and self.right.isomorphism(other_tree.right)) or \
+                   (self.left.isomorphism(other_tree.right) and self.right.isomorphism(other_tree.left))
+        elif if_none == 15:
+            return True
+        elif if_none == 5:
+            return self.right.isomorphism(other_tree.right)
+        elif if_none == 10:
+            return self.left.isomorphism(other_tree.left)
+        elif if_none == 9:
+            return self.right.isomorphism(other_tree.left)
+        elif if_none == 6:
+            return self.left.isomorphism(other_tree.right)
+        return False
+
+    def __eq__(self, other):
+        """
+        递归判断树是否相等，
+        :param other: 另一棵LinkListBinaryTree
+        :return: 结点值是否相等
+        """
+        return self.data == other.data and self.left == other.left and self.right == other.right
 
 
 # 二叉树顺序存储,方法多用循环实现
@@ -497,14 +531,52 @@ class SequenceListBinaryTree:
                 nodes_list.append(node.right)
         return tree
 
+    def isomorphism(self, other_tree):
+        """
+        判断树是否同构,
+        :param other_tree: 另一棵树
+        :return: 是否同构
+        """
+        # node_1, node_2 = self, other_tree
+        # node_stack_1, node_stack_2 = [], []
+        # while (node_stack_1 or node_1) and (node_stack_2 or node_2):
+        #     if node_1 is None and node_2 is None:
+        #         pass
+        #     if (node_1 is None and node_2 is not None) or (node_1 is not None and node_2 is None):
+        #         pass
+        #     if node_1.val != node_2.val:
+        #         pass
+        #     if node_1.left is None and node_2.left is None:
+        #         pass
+        pass
+
     def __repr__(self):
         return str(self.data)
 
     def __eq__(self, other):
-        try:
-            return self._tree == other._tree and self._index_tree == other._index_tree
-        except:
-            return False
+        """
+        堆栈的方式解决，比较他们的值
+        :param other: 另外一个SequenceListBinaryTree
+        :return: 两棵树是否相等
+        """
+        node_1 = self
+        node_2 = other
+        node_stack_1 = []
+        node_stack_2 = []
+        while node_stack_1 or node_1:
+            if node_1 and node_2:
+                if node_1.data != node_2.data:
+                    return False
+                node_stack_1.append(node_1)
+                node_stack_2.append(node_2)
+                node_1 = node_1.left
+                node_2 = node_2.left
+            else:
+                if node_1 or node_2:
+                    return False
+                node_1 = node_stack_1.pop().right
+                node_2 = node_stack_2.pop().right
+        return True
 
     def __getitem__(self, item):
         return self._tree[item] if 0 <= item < len(self._tree) else None
@@ -526,9 +598,14 @@ if __name__ == "__main__":
     print(sequence_tree.post_order_traversal())
     print(sequence_tree.level_order_traversal())
     print(sequence_tree.height)
+    # tree_list = [[1, 1, 2], [2, -1, 3], [3, 4, 5], [5, 6, -1], [6, 7, 8],
+    #              [7, 9, -1], [10, -1, -1], [12, -1, -1], [13, -1, -1], [14, -1, -1]]
+    # link_tree_1 = LinkListBinaryTree(tree_list=tree_list)
+    # print(link_tree == link_tree_1)
     tree_list = [[1, 1, 2], [3, 3, 4], [2, 5, -1], [6, 6, 7], [7, -1, 8],
                  [5, 9, -1], [13, -1, -1], [12, -1, -1], [14, -1, -1], [10, -1, -1]]
     link_tree_1 = LinkListBinaryTree(tree_list=tree_list)
+    print(link_tree.isomorphism(link_tree_1))
     sequence_tree_1 = SequenceListBinaryTree(tree_list=tree_list)
     # print(link_tree_1.pre_order_traversal())
     # print(link_tree_1.in_order_traversal())
@@ -539,5 +616,3 @@ if __name__ == "__main__":
     # sequence_tree_1.link2sequence(link_tree)
     # sequence_tree_1 = SequenceListBinaryTree(tree_list=tree_list)
 
-    a = 1
-    pass

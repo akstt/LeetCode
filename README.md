@@ -6,9 +6,9 @@
 # DataStructure
 一些自己写的关于数据结构的类
 ## 线性表
-1. [线性表的顺序存储和链式存储](.\\DataStructure\\LinearList.py)
-2. [队列的顺序存储和链式存储](.\\DataStructure\\QueueClass.py)
-3. [堆栈的顺序存储和链式存储](.\\DataStructure\\StackClass.py)  
+1. [线性表的顺序存储和链式存储](./DataStructure/LinearList.py)
+2. [队列的顺序存储和链式存储](./DataStructure/QueueClass.py)
+3. [堆栈的顺序存储和链式存储](./DataStructure/StackClass.py)  
 在写链式存储类的时候，我把结点类和存储类分开作为两个类。之后我感觉其实可以把这两个类合并成一个类
 
 ## 树

@@ -25,8 +25,12 @@ class MaxHeap:
         self._rear = 0
         if val_input is not None:
             for val in val_input:
-                self._maxHeap[self._rear] = val
-                self._rear += 1
+                try:
+                    self._maxHeap[self._rear] = val
+                    self._rear += 1
+                except IndexError:
+                    print("堆容量不足")
+                    break
             self._build_heap()
 
     def _build_heap(self):

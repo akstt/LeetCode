@@ -216,6 +216,36 @@ def quick_sort(list_insert):
     # cut_off 大于等于1
     cut_off = 5
     divide(0, len(list_insert)-1)
+
+
+# 基数排序 次位优先 范围0-999
+def radix_sort_LSD(list_insert):
+    """"
+    时间复杂度：O(p(n + b))
+    稳定
+    :param list_insert: 需要排序的列表，原地修改
+    """
+    buckets = [[] for i in range(10)]
+    for num in list_insert:
+        buckets[0].append(num)
+    num_divisor_1 = 10
+    num_divisor_2 = 1
+    while num_divisor_1 <= 1000:
+        buckets_new = [[] for i in range(10)]
+        for bucket in buckets:
+            for num in bucket:
+                index_bucket = num % num_divisor_1
+                index_bucket = index_bucket // num_divisor_2
+                buckets_new[index_bucket].append(num)
+        buckets = buckets_new
+        num_divisor_2 = num_divisor_1
+        num_divisor_1 *= 10
+    index_1 = 0
+    for bucket in buckets:
+        for num in bucket:
+            list_insert[index_1] = num
+            index_1 += 1
+
 import random
 
 def equal(list_1, list_2):
@@ -225,6 +255,14 @@ def equal(list_1, list_2):
         if list_1[i] != list_2[i]:
             return False
     return True
+
+
+def isSorted(list_1):
+    for i in range(len(list_1)-1):
+        if list_1[i] > list_1[i+1]:
+            return False
+    return True
+
 
 def test():
     list_1 = list(range(-50, 51))
@@ -267,7 +305,17 @@ def test():
     quick_sort(list_1)
     print(list_1)
     print(equal(list_1, list_2))
+
+    print("radix_sort_LSD")
+    list_4 = []
+    for i in range(100):
+        list_4.append(random.randint(0, 999))
+    radix_sort_LSD(list_4)
+    print(list_4)
+    print(isSorted(list_4))
     pass
+
+
 
 
 if __name__ == "__main__":

@@ -135,7 +135,7 @@ def BM(text, pattern):
                             break
                 # 好后缀
                 if index_text_step == index_pattern + 1:
-                    index_text_step = len(pattern);
+                    index_text_step = len(pattern)
                     for index_prefix in prefix_index_all:
                         if index_prefix > index_pattern:
                             index_text_step = index_prefix
@@ -153,11 +153,12 @@ def BM(text, pattern):
             break
     return index_result
 
+
 # Sunday 算法
 def Sunday(text, pattern):
     """
     平均时间复杂度：O(n)
-    空间复杂度O(m)
+    空间复杂度O(1)
     :param text: 是一个长度为n的字符串
     :param pattern: 是一个长度为m的字符串
     :return: pattern在text第一次出现的索引位置

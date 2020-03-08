@@ -1,9 +1,9 @@
 # LeetCode 第28题
 
 """
-文本Text: 是一个长度为n的数组T[n]
-模式Pattern: 是一个长度为m的数组P[m],  并且m<=n.
-T和P的元素都属于有限的字母表
+文本Text: 是一个长度为n的字符串
+模式Pattern: 是一个长度为m的字符串,  并且m<=n.
+Text和Pattern的元素都属于有限的字母表
 """
 
 
@@ -12,8 +12,8 @@ def naive_algorithm(text, pattern):
     """
     时间复杂度：O(n * m)
     空间复杂度O(1)
-    :param text: 是一个长度为n的数组
-    :param pattern: 是一个长度为m的数组
+    :param text: 是一个长度为n的字符串
+    :param pattern: 是一个长度为m的字符串
     :return: pattern在text第一次出现的索引位置
     """
     index_result = -1
@@ -34,8 +34,8 @@ def KMP(text, pattern):
     """
     平均时间复杂度：O(n)
     空间复杂度O(m)
-    :param text: 是一个长度为n的数组
-    :param pattern: 是一个长度为m的数组
+    :param text: 是一个长度为n的字符串
+    :param pattern: 是一个长度为m的字符串
     :return: pattern在text第一次出现的索引位置
     """
     # 辅助数组, 获得最长相同前缀后缀子字符串
@@ -79,8 +79,8 @@ def BM(text, pattern):
     """
     平均时间复杂度：O(n)
     空间复杂度O(m)
-    :param text: 是一个长度为n的数组
-    :param pattern: 是一个长度为m的数组
+    :param text: 是一个长度为n的字符串
+    :param pattern: 是一个长度为m的字符串
     :return: pattern在text第一次出现的索引位置
     """
 
@@ -156,8 +156,8 @@ def Sunday(text, pattern):
     """
     平均时间复杂度：O(n)
     空间复杂度O(m)
-    :param text: 是一个长度为n的数组
-    :param pattern: 是一个长度为m的数组
+    :param text: 是一个长度为n的字符串
+    :param pattern: 是一个长度为m的字符串
     :return: pattern在text第一次出现的索引位置
     """
     index_pattern_char = dict()

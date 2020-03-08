@@ -13,4 +13,4 @@ class Solution:
             num_1 -= 1
         return num_mul_1 // num_mul_2
 
-print(Solution().uniquePaths(7, 3))
+print(Solution().uniquePaths(10, 10))

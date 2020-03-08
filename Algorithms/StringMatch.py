@@ -124,7 +124,7 @@ def BM(text, pattern):
             if text[index_text] != pattern[index_pattern]:
                 # BM算法的特点就在于此，选择上述两种启发法规则（坏字符和好后缀）计算结果中最大的一个值来对模式P的比较位置进行滑动。
                 # 我感觉上面这句话不太对
-                # 我认为应该是坏字符不失效时，才会采用好后缀的规则
+                # 我认为应该是坏字符失效时，才会采用好后缀的规则
                 # 坏字符
                 char_text = text[index_text]
                 index_text_step = index_pattern + 1

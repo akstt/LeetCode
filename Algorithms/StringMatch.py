@@ -135,6 +135,7 @@ def BM(text, pattern):
                             break
                 # 好后缀
                 if index_text_step == index_pattern + 1:
+                    index_text_step = len(pattern);
                     for index_prefix in prefix_index_all:
                         if index_prefix > index_pattern:
                             index_text_step = index_prefix
